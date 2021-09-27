@@ -1,21 +1,39 @@
 #!/bin/bash
 
-NUMID_DRONE=111
-DRONE_SWARM_ID=1
-MAV_NAME=hummingbird
-export APPLICATION_PATH=${PWD}
+NUMID_DRONE=1
+UAV_MASS=1.5
 
+export APPLICATION_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-#---------------------------------------------------------------------------------------------
-# INTERNAL PROCESSES
-#---------------------------------------------------------------------------------------------
 gnome-terminal  \
+`#---------------------------------------------------------------------------------------------` \
+`# alphanumeric_viewer                                                                         ` \
+`#---------------------------------------------------------------------------------------------` \
+--tab --title "alphanumeric_viewer"  --command "bash -c \"
+roslaunch alphanumeric_viewer alphanumeric_viewer.launch --wait \
+    drone_id_namespace:=drone$NUMID_DRONE \
+    my_stack_directory:=${AEROSTACK_PROJECT};
+exec bash\"" \
+`#---------------------------------------------------------------------------------------------` \
+`# keyboard_teleoperation_with_pid_control                                                     ` \
+`#---------------------------------------------------------------------------------------------` \
+--tab --title "keyboard_teleoperation_with_pid_control"  --command "bash -c \"
+roslaunch keyboard_teleoperation_with_pid_control keyboard_teleoperation_with_pid_control.launch --wait \
+  drone_id_namespace:=drone$NUMID_DRONE;
+exec bash\"" \
+`#---------------------------------------------------------------------------------------------` \
+`# Pixhawk Interface                                                                           ` \
+`#---------------------------------------------------------------------------------------------` \
+--tab --title "Pixhawk Interface" --command "bash -c \"
+roslaunch pixhawk_interface pixhawk_interface.launch \
+--wait drone_id_namespace:=drone$NUMID_DRONE acro_mode:=false simulation_mode:=true;
+exec bash\"" \
 `#---------------------------------------------------------------------------------------------` \
 `# Basic Behaviors                                                                             ` \
 `#---------------------------------------------------------------------------------------------` \
 --tab --title "Basic Behaviors" --command "bash -c \"
 roslaunch basic_quadrotor_behaviors basic_quadrotor_behaviors.launch --wait \
-    namespace:=drone$NUMID_DRONE;
+  namespace:=drone$NUMID_DRONE;
 exec bash\"" \
 `#---------------------------------------------------------------------------------------------` \
 `# Quadrotor Motion With PID Control                                                           ` \
@@ -24,47 +42,21 @@ exec bash\"" \
 roslaunch quadrotor_motion_with_pid_control quadrotor_motion_with_pid_control.launch --wait \
     namespace:=drone$NUMID_DRONE \
     robot_config_path:=${APPLICATION_PATH}/configs/drone$NUMID_DRONE \
-    uav_mass:=0.7;
+    uav_mass:=$UAV_MASS;
 exec bash\""  \
 `#---------------------------------------------------------------------------------------------` \
-`# Gazebo Interface                                                                            ` \
+`# Throttle Controller                                                                         ` \
 `#---------------------------------------------------------------------------------------------` \
-  --tab --title "Gazebo Interface" --command "bash -c \"
-roslaunch gazebo_interface gazebo_interface.launch --wait \
-    robot_namespace:=drone$NUMID_DRONE \
-    drone_id:=$DRONE_SWARM_ID \
-    mav_name:=$MAV_NAME;
-exec bash\""  \
-`#---------------------------------------------------------------------------------------------` \
-`# Gazebo motor speed controller                                                               ` \
-`#---------------------------------------------------------------------------------------------` \
---tab --title "Motor speed controller"  --command "bash -c \"
-roslaunch motor_speed_controller motor_speed_controller.launch --wait \
+--tab --title "Throttle Controller" --command "bash -c \"
+roslaunch thrust2throttle_controller thrust2throttle_controller.launch --wait \
   namespace:=drone$NUMID_DRONE \
-  mav_name:=$MAV_NAME;
-exec bash\"" &
-
-sleep 10
-rosservice call /drone$NUMID_DRONE/basic_quadrotor_behaviors/behavior_self_localize_with_ground_truth/activate_behavior "timeout: 10000"
-rosservice call /drone$NUMID_DRONE/quadrotor_motion_with_pid_control/behavior_quadrotor_pid_motion_control/activate_behavior "timeout: 10000"
-rosservice call /drone$NUMID_DRONE/quadrotor_motion_with_pid_control/behavior_quadrotor_pid_thrust_control/activate_behavior "timeout: 10000"
-
-#---------------------------------------------------------------------------------------------
-# SHELL INTERFACE
-#---------------------------------------------------------------------------------------------
-gnome-terminal  \
-`#---------------------------------------------------------------------------------------------` \
-`# alphanumeric_viewer                                                                         ` \
-`#---------------------------------------------------------------------------------------------` \
---tab --title "alphanumeric_viewer"  --command "bash -c \"
-roslaunch alphanumeric_viewer alphanumeric_viewer.launch --wait \
-    drone_id_namespace:=drone$NUMID_DRONE;
+  uav_mass:=$UAV_MASS;
 exec bash\""  &
-gnome-terminal  \
-`#---------------------------------------------------------------------------------------------` \
-`# keyboard_teleoperation_with_pid_control                                                     ` \
-`#---------------------------------------------------------------------------------------------` \
---title "keyboard_teleoperation_with_pid_control"  --command "bash -c \"
-roslaunch keyboard_teleoperation_with_pid_control keyboard_teleoperation_with_pid_control.launch --wait \
-  drone_id_namespace:=drone$NUMID_DRONE;
-exec bash\""  &
+
+rosrun topic_tools relay /drone${NUMID_DRONE}/mavros/local_position/pose /drone${NUMID_DRONE}/self_localization/pose &
+rosrun topic_tools relay drone${NUMID_DRONE}/mavros/local_position/velocity_local /drone${NUMID_DRONE}/self_localization/speed &
+
+sleep 5
+rosservice call /drone$NUMID_DRONE/basic_quadrotor_behaviors/behavior_self_localize_with_ground_truth/activate_behavior "timeout: 10000" &
+rosservice call /drone$NUMID_DRONE/quadrotor_motion_with_pid_control/behavior_quadrotor_pid_motion_control/activate_behavior "timeout: 10000" &
+rosservice call /drone$NUMID_DRONE/quadrotor_motion_with_pid_control/behavior_quadrotor_pid_thrust_control/activate_behavior "timeout: 10000" &
