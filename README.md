@@ -12,7 +12,8 @@ In this project, the user can use the keyboard to teleoperate a drone using the 
 
 - Wait until the following window is presented:
 
-![Gazebo simulator interface with drone ](https://i.ibb.co/XV1hYDy/Captura-de-pantalla-de-2021-06-07-11-16-42.png)
+<img src="https://github.com/aerostack/teleoperation_gazebo/blob/v5-libeccio/docs/gazeboteleoperation.png">
+
 
 - Open a new terminal and change directory to the project:
 
@@ -26,6 +27,10 @@ In this project, the user can use the keyboard to teleoperate a drone using the 
 
 ![Alphanumeric interface view](https://i.ibb.co/yXWbMSz/Captura-de-pantalla-de-2021-06-08-13-00-52.png)
 
+- You can also click on the alphanumeric viewer window to see the state of the drone:
+
+<img src="https://github.com/aerostack/teleoperation_gazebo/blob/v5-libeccio/docs/alphanumeric%20viewer.png">
+
 - To stop the processes execute the following script:
 
         $ ./stop.sh
@@ -36,4 +41,4 @@ In this project, the user can use the keyboard to teleoperate a drone using the 
 
 ## Video demo:
 
-[ ![Basic Tello Mission](https://img.youtube.com/vi/8RhyvMiy8PU/0.jpg)](https://www.youtube.com/watch?v=8RhyvMiy8PU)
+[ ![Basic Tello Mission](https://github.com/aerostack/teleoperation_gazebo/blob/v5-libeccio/docs/teleoperation%20miniature.png)](https://www.youtube.com/watch?v=8RhyvMiy8PU)
