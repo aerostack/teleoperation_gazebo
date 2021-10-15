@@ -12,7 +12,7 @@ In this project, the user can use the keyboard to teleoperate a drone using the 
 
 - Wait until the following window is presented:
 
-<img src="https://github.com/aerostack/teleoperation_gazebo/blob/v5-libeccio/docs/gazeboteleoperation.png">
+<img src="https://github.com/aerostack/teleoperation_gazebo/blob/v5-libeccio/doc/gazeboteleoperation.png">
 
 
 - Open a new terminal and change directory to the project:
@@ -29,7 +29,7 @@ In this project, the user can use the keyboard to teleoperate a drone using the 
 
 - You can also click on the alphanumeric viewer window to see the state of the drone:
 
-<img src="https://github.com/aerostack/teleoperation_gazebo/blob/v5-libeccio/docs/alphanumeric%20viewer.png">
+<img src="https://github.com/aerostack/teleoperation_gazebo/blob/v5-libeccio/doc/alphanumeric%20viewer.png">
 
 - To stop the processes execute the following script:
 
@@ -41,4 +41,4 @@ In this project, the user can use the keyboard to teleoperate a drone using the 
 
 ## Video demo:
 
-[ ![Basic Tello Mission](https://github.com/aerostack/teleoperation_gazebo/blob/v5-libeccio/docs/teleoperation%20miniature.png)](https://www.youtube.com/watch?v=8RhyvMiy8PU)
+[ ![Basic Tello Mission](https://github.com/aerostack/teleoperation_gazebo/blob/v5-libeccio/doc/teleoperation%20miniature.png)](https://www.youtube.com/watch?v=8RhyvMiy8PU)
