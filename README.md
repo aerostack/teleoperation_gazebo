@@ -36,4 +36,4 @@ In this project, the user can use the keyboard to teleoperate a drone using the 
 
 ## Video demo:
 
-[ ![Basic Tello Mission](https://img.youtube.com/vi/AlS3xT3kDOM/0.jpg)](https://www.youtube.com/watch?v=g39UEAXqxb4)
+[ ![Basic Tello Mission](https://img.youtube.com/vi/8RhyvMiy8PU/0.jpg)](https://www.youtube.com/watch?v=8RhyvMiy8PU)
