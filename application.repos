@@ -21,20 +21,12 @@ repositories:
     version: v5-libeccio
 
 #----------------------------------------------------------------------------
-# Belief updaters
-#----------------------------------------------------------------------------
-
-#----------------------------------------------------------------------------
-# Mission control
-#----------------------------------------------------------------------------
-
-#----------------------------------------------------------------------------
 # Executive
 #----------------------------------------------------------------------------
   executive/coordinator_cbc:
     type: git 
     url: https://github.com/cvar-upm/coordinator_cbc
-    version: v5-libeccio
+    version: v1.0
 #----------------------------------------------------------------------------
 # Simulation
 #----------------------------------------------------------------------------
@@ -69,7 +61,7 @@ repositories:
   libraries/behaviorlib:
     type: git 
     url: https://github.com/cvar-upm/behaviorlib
-    version: v5-libeccio
+    version: v1.0
   libraries/robot_process:
     type: git 
     url: https://github.com/aerostack/robot_process
